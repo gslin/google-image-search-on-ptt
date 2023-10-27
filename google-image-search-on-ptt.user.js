@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Google Image Search on Ptt
 // @namespace    https://wiki.gslin.org/wiki/GoogleImageSearchOnPtt
-// @version      0.20231026.0
+// @version      0.20231027.0
 // @description  Add Google image search buttons on Ptt.
 // @author       Gea-Suan Lin <darkkiller@gmail.com>
 // @match        https://www.ptt.cc/bbs/*/*.html
@@ -16,13 +16,13 @@
         let img_re = new RegExp('\.(gif|jpeg|jpg|png|webp)$');
         let timeout = 0;
 
-        document.querySelectorAll('#main-content img').forEach(function(el){
-            let href = el.getAttribute('src');
-            if (!href.match(img_re)) {
+        document.querySelectorAll('#main-content a, #main-content img').forEach(function(el) {
+            const img_url = el.getAttribute('href') || el.getAttribute('src');
+            if (!img_url.match(img_re)) {
                 return;
             }
 
-            let url = 'https://lens.google.com/uploadbyurl?url=' + encodeURIComponent(href);
+            let url = 'https://lens.google.com/uploadbyurl?url=' + encodeURIComponent(img_url);
             setTimeout(function() {
                 GM_openInTab(url, true);
             }, timeout);
